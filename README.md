@@ -1,9 +1,13 @@
-# sbt-antlr
+# sbt-jflex
 
-A plugin for sbt-0.11.x that generates code based on an antlr grammar.
+A plugin for sbt-0.11.x that generates code based on an jflex specification.
+
+This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
 
 
 ## Usage
+
+TODO
 
 Depend on the plugin: `./project/plugins/build.sbt`
 
@@ -19,7 +23,7 @@ re-generate the java source files.
 
 ## Include Plugin Settings
 
-Include the settings from `sbtantlr.SbtAntlrPlugin.antlrSettings` in
+Include the settings from `sbtjflex.SbtJFlexPlugin.antlrSettings` in
 your project build file. See the [SBT wiki page on plugins][1] for
 further details.
 
@@ -34,17 +38,10 @@ request to improve the codebase.
 
 ## License
 
-`sbt-antlr` is licensed under the [Apache 2.0 License][2],
+`sbt-jflex` is licensed under the [Apache 2.0 License][2],
 see the `LICENSE.md` file for further details.
 
 
 ## Credits
 
-`sbt-antlr` is inspired by the `antlr3-maven-plugin` used to get a quick
-start with the antlr generator tool. Moreover, since this was my first
-SBT plugin, some of the already existing code generating SBT plugins
-were used to understand the basics (namely the `sbt-protobuf` and
-`sbt-xjc` plugins).
-  
-  [1]: https://github.com/harrah/xsbt/wiki/Plugins
-  [2]: http://www.apache.org/licenses/LICENSE-2.0.html
+This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
