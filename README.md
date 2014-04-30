@@ -7,22 +7,25 @@ This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
 
 ## Usage
 
-TODO
+Depend on the plugin: `./project/plugins.sbt'
 
-Depend on the plugin: `./project/plugins/build.sbt`
 
-    resolvers += "stefri" at "http://stefri.github.com/repo/snapshots"
+```scala
+  addSbtPlugin("org.scalanlp" % "sbt-jflex" % "0.1-SNAPSHOT")
+```
 
-    addSbtPlugin("com.github.stefri" % "sbt-antlr" % "0.2-SNAPSHOT")
 
-Place your ANTLR3 grammar files in `src/main/antlr3` and they will be
-included in your next build. Note, `sbt-antlr` generates the source code
-only once as long as your grammar file didn't change it does not
+Place your Jflex lexer file in `src/main/flex/` and they will be
+included in your next build. Note, `sbt-jflex` generates the source code
+only once as long as your lexer file didn't change it does not
 re-generate the java source files.
 
 
 ## Include Plugin Settings
 
+```scala
+   seq(sbtjflex.SbtJFlexPlugin.jflexSettings: _*)
+```
 Include the settings from `sbtjflex.SbtJFlexPlugin.antlrSettings` in
 your project build file. See the [SBT wiki page on plugins][1] for
 further details.
@@ -45,3 +48,6 @@ see the `LICENSE.md` file for further details.
 ## Credits
 
 This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
+
+  [1]: http://www.scala-sbt.org/0.13.2/docs/Getting-Started/Using-Plugins.html
+  [2]: http://www.apache.org/licenses/LICENSE-2.0.html
