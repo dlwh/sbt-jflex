@@ -19,8 +19,8 @@ package sbtjflex
 import sbt._
 import Process._
 import Keys._
-import JFlex.Options
-import JFlex.Main
+import jflex.Options
+import jflex.Main
 import scala.collection.JavaConversions._
 import Project.Initialize
 
