@@ -45,7 +45,7 @@ object SbtJFlexPlugin extends Plugin {
   lazy val jflexSettings: Seq[Project.Setting[_]] = inConfig(jflex)(Seq(
     toolConfiguration := JFlexToolConfiguration(),
     pluginConfiguration := PluginConfiguration(),
-    antlrDependency := "de.jflex" % "jflex" % "1.4.3",
+    antlrDependency := "de.jflex" % "jflex" % "1.6.0",
 
     sourceDirectory <<= (sourceDirectory in Compile) { _ / "flex" },
     javaSource <<= sourceManaged in Compile,

@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 
 object Dependencies {
-    val jflex = "de.jflex" % "jflex" % "1.5.1" % "compile"
+    val jflex = "de.jflex" % "jflex" % "1.6.0" % "compile"
 
     val commonDeps = Seq(
         jflex
@@ -18,7 +18,7 @@ object BuildSbtJFlex extends Build {
 
         settings = Defaults.defaultSettings ++ Seq(
             organization := "org.scalanlp",
-            version := "0.2",
+            version := "0.3",
             sbtPlugin := true,
             
             scalacOptions := Seq("-deprecation", "-unchecked"),
@@ -56,6 +56,6 @@ object BuildSbtJFlex extends Build {
                   </developers>
                 )
 
-        )
+        ) ++ net.virtualvoid.sbt.graph.Plugin.graphSettings
     )
 }
