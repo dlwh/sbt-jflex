@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 
 object Dependencies {
-    val jflex = "de.jflex" % "jflex" % "1.6.0" % "compile"
+    val jflex = "de.jflex" % "jflex" % "1.6.1" % "compile"
 
     val commonDeps = Seq(
         jflex
@@ -12,14 +12,15 @@ object Dependencies {
 object BuildSbtJFlex extends Build {
     import Dependencies._
 
-    val sbtAntlr = Project(
+    val sbtJflex = Project(
         id = "sbt-jflex",
         base = file("."),
 
         settings = Defaults.defaultSettings ++ Seq(
             organization := "org.scalanlp",
-            version := "0.3",
+            version := "0.4",
             sbtPlugin := true,
+            description := "automatically compile jflex grammars",
             
             scalacOptions := Seq("-deprecation", "-unchecked"),
 
