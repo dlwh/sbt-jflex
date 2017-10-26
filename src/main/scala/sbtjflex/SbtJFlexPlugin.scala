@@ -32,7 +32,7 @@ object SbtJFlexPlugin extends AutoPlugin {
 
   final case class PluginConfiguration(grammarSuffix: String = ".flex")
 
-  val jflex = config("jflex")
+  val Jflex = config("jflex")
   val generate = TaskKey[Seq[File]]("generate")
   val jflexDependency = SettingKey[ModuleID]("jflex-dependency")
   val toolConfiguration = SettingKey[JFlexToolConfiguration]("jflex-tool-configuration")
@@ -42,40 +42,40 @@ object SbtJFlexPlugin extends AutoPlugin {
     * use this if you don't want jflex to run automatically (because, e.g., you're checking it in)
     * you'll want to set [[target]] in [[jflex]] using [[unmanagedJflexSettings]] or your own variant
     */
-  lazy val commonJflexSettings: Seq[Def.Setting[_]] = inConfig(jflex)(Seq(
+  lazy val commonJflexSettings: Seq[Def.Setting[_]] = inConfig(Jflex)(Seq(
     toolConfiguration := JFlexToolConfiguration(),
     pluginConfiguration := PluginConfiguration(),
     jflexDependency := "de.jflex" % "jflex" % "1.6.1",
 
     sourceDirectory := (sourceDirectory in Compile).value / "flex",
 
-    managedClasspath := Classpaths.managedJars(jflex, (classpathTypes in jflex).value, update.value),
+    managedClasspath := Classpaths.managedJars(Jflex, (classpathTypes in Jflex).value, update.value),
 
     generate := {
       val out = streams.value
-      val options = (pluginConfiguration in jflex).value
+      val options = (pluginConfiguration in Jflex).value
       val cachedCompile = FileFunction.cached(out.cacheDirectory / "flex", inStyle = FilesInfo.lastModified, outStyle = FilesInfo.exists) { (in: Set[File]) =>
-        generateWithJFlex(in, (target in jflex).value, (toolConfiguration in jflex).value, options, out.log)
+        generateWithJFlex(in, (target in Jflex).value, (toolConfiguration in Jflex).value, options, out.log)
       }
-      cachedCompile(((sourceDirectory in jflex).value ** ("*" + options.grammarSuffix)).get.toSet).toSeq
+      cachedCompile(((sourceDirectory in Jflex).value ** ("*" + options.grammarSuffix)).get.toSet).toSeq
     }
   )) ++ Seq(
-    libraryDependencies += (jflexDependency in jflex).value,
-    ivyConfigurations += jflex
+    libraryDependencies += (jflexDependency in Jflex).value,
+    ivyConfigurations += Jflex
   )
 
-  lazy val unmanagedJflexSettings = commonJflexSettings ++ inConfig(jflex)(Seq(
-    target in jflex := (javaSource in Compile).value,
-    managedSources := (generate in jflex).value
+  lazy val unmanagedJflexSettings = commonJflexSettings ++ inConfig(Jflex)(Seq(
+    target in Jflex := (javaSource in Compile).value,
+    managedSources := (generate in Jflex).value
   ))
 
   lazy val jflexSettings: Seq[Def.Setting[_]] = commonJflexSettings ++
-  inConfig(jflex)(
-    target in jflex := (sourceManaged in Compile).value
+  inConfig(Jflex)(
+    target in Jflex := (sourceManaged in Compile).value
   ) ++ Seq(
-    unmanagedSourceDirectories in Compile += (sourceDirectory in jflex).value,
-    sourceGenerators in Compile += (generate in jflex).taskValue,
-    cleanFiles += (target in jflex).value
+    unmanagedSourceDirectories in Compile += (sourceDirectory in Jflex).value,
+    sourceGenerators in Compile += (generate in Jflex).taskValue,
+    cleanFiles += (target in Jflex).value
   )
 
   private def generateWithJFlex(sources: Set[File], target: File, tool: JFlexToolConfiguration,
