@@ -22,7 +22,6 @@ import Keys._
 import jflex.Options
 import jflex.Main
 import scala.collection.JavaConversions._
-import Project.Initialize
 
 object SbtJFlexPlugin extends AutoPlugin {
 
@@ -33,7 +32,7 @@ object SbtJFlexPlugin extends AutoPlugin {
 
   final case class PluginConfiguration(grammarSuffix: String = ".flex")
 
-  val jflex = config("jflex")
+  val Jflex = config("jflex")
   val generate = TaskKey[Seq[File]]("generate")
   val jflexDependency = SettingKey[ModuleID]("jflex-dependency")
   val toolConfiguration = SettingKey[JFlexToolConfiguration]("jflex-tool-configuration")
@@ -43,45 +42,41 @@ object SbtJFlexPlugin extends AutoPlugin {
     * use this if you don't want jflex to run automatically (because, e.g., you're checking it in)
     * you'll want to set [[target]] in [[jflex]] using [[unmanagedJflexSettings]] or your own variant
     */
-  lazy val commonJflexSettings: Seq[Def.Setting[_]] = inConfig(jflex)(Seq(
+  lazy val commonJflexSettings: Seq[Def.Setting[_]] = inConfig(Jflex)(Seq(
     toolConfiguration := JFlexToolConfiguration(),
     pluginConfiguration := PluginConfiguration(),
     jflexDependency := "de.jflex" % "jflex" % "1.6.1",
 
-    sourceDirectory <<= (sourceDirectory in Compile) { _ / "flex" },
+    sourceDirectory := (sourceDirectory in Compile).value / "flex",
 
-    managedClasspath <<= (classpathTypes in jflex, update) map { (ct, report) =>
-      Classpaths.managedJars(jflex, ct, report)
-    },
+    managedClasspath := Classpaths.managedJars(Jflex, (classpathTypes in Jflex).value, update.value),
 
-    generate <<= sourceGeneratorTask
+    generate := {
+      val out = streams.value
+      val options = (pluginConfiguration in Jflex).value
+      val cachedCompile = FileFunction.cached(out.cacheDirectory / "flex", inStyle = FilesInfo.lastModified, outStyle = FilesInfo.exists) { (in: Set[File]) =>
+        generateWithJFlex(in, (target in Jflex).value, (toolConfiguration in Jflex).value, options, out.log)
+      }
+      cachedCompile(((sourceDirectory in Jflex).value ** ("*" + options.grammarSuffix)).get.toSet).toSeq
+    }
   )) ++ Seq(
-    libraryDependencies <+= (jflexDependency in jflex),
-    ivyConfigurations += jflex
+    libraryDependencies += (jflexDependency in Jflex).value,
+    ivyConfigurations += Jflex
   )
 
-  lazy val unmanagedJflexSettings = commonJflexSettings ++ inConfig(jflex)(Seq(
-    target in jflex <<= javaSource in Compile,
-    managedSources <<= (generate in jflex)
+  lazy val unmanagedJflexSettings = commonJflexSettings ++ inConfig(Jflex)(Seq(
+    target in Jflex := (javaSource in Compile).value,
+    managedSources := (generate in Jflex).value
   ))
 
   lazy val jflexSettings: Seq[Def.Setting[_]] = commonJflexSettings ++
-  inConfig(jflex)(
-    target in jflex <<= sourceManaged in Compile
+  inConfig(Jflex)(
+    target in Jflex := (sourceManaged in Compile).value
   ) ++ Seq(
-    unmanagedSourceDirectories in Compile <+= (sourceDirectory in jflex),
-    sourceGenerators in Compile <+= (generate in jflex),
-    cleanFiles <+= (target in jflex)
+    unmanagedSourceDirectories in Compile += (sourceDirectory in Jflex).value,
+    sourceGenerators in Compile += (generate in Jflex).taskValue,
+    cleanFiles += (target in Jflex).value
   )
-
-  private def sourceGeneratorTask: Def.Initialize[Task[Seq[File]]] = (streams, sourceDirectory in jflex, target in jflex,
-    toolConfiguration in jflex, pluginConfiguration in jflex) map {
-      (out, srcDir, targetDir, tool, options) =>
-        val cachedCompile = FileFunction.cached(out.cacheDirectory / "flex", inStyle = FilesInfo.lastModified, outStyle = FilesInfo.exists) { (in: Set[File]) =>
-          generateWithJFlex(in, targetDir, tool, options, out.log)
-        }
-        cachedCompile((srcDir ** ("*" + options.grammarSuffix)).get.toSet).toSeq
-    }
 
   private def generateWithJFlex(sources: Set[File], target: File, tool: JFlexToolConfiguration,
                                 options: PluginConfiguration, log: Logger) = {
