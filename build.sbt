@@ -4,15 +4,15 @@ val sbtJflex = (project in file(".")).settings(
   version := "0.4",
   sbtPlugin := true,
   description := "automatically compile jflex grammars",
-  
+
   scalacOptions := Seq("-deprecation", "-unchecked"),
 
   libraryDependencies ++= Seq("de.jflex" % "jflex" % "1.6.1" % "compile"),
 
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
-    if (version.value.trim.endsWith("SNAPSHOT")) 
-      Some("snapshots" at nexus + "content/repositories/snapshots") 
+    if (version.value.trim.endsWith("SNAPSHOT"))
+      Some("snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
