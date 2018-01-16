@@ -40,5 +40,5 @@ val sbtJflex = (project in file(".")).settings(
     </developers>
   ),
 
-  crossSbtVersions := Seq("0.13.16", "1.0.2")
+  crossSbtVersions := Seq("0.13.16", "1.0.4")
 )
