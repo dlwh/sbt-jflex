@@ -2,7 +2,7 @@
 
 A plugin for sbt 0.13.x and 1.0 that generates code based on an jflex specification.
 
-This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
+This is a shameless fork-and-adapt of [stefri's sbt-antlr plugin](https://github.com/stefri/sbt-antlr).
 
 
 ## Usage
@@ -26,7 +26,7 @@ re-generate the java source files.
 ```scala
    seq(sbtjflex.SbtJFlexPlugin.jflexSettings: _*)
 ```
-Include the settings from `sbtjflex.SbtJFlexPlugin.antlrSettings` in
+Include the settings from `sbtjflex.SbtJFlexPlugin.jflexSettings` in
 your project build file. See the [SBT wiki page on plugins][1] for
 further details.
 
@@ -47,7 +47,7 @@ see the `LICENSE.md` file for further details.
 
 ## Credits
 
-This is a shameless fork-and-adapt of stefri's sbt-antlr plugin.
+This is a shameless fork-and-adapt of [stefri's sbt-antlr plugin](https://github.com/stefri/sbt-antlr).
 
   [1]: http://www.scala-sbt.org/0.13.2/docs/Getting-Started/Using-Plugins.html
   [2]: http://www.apache.org/licenses/LICENSE-2.0.html
