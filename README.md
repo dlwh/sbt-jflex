@@ -7,11 +7,11 @@ This is a shameless fork-and-adapt of [stefri's sbt-antlr plugin](https://github
 
 ## Usage
 
-Depend on the plugin: `./project/plugins.sbt'
+Depend on the plugin: `./project/plugins.sbt`
 
 
 ```scala
-  addSbtPlugin("org.scalanlp" % "sbt-jflex" % "0.1-SNAPSHOT")
+addSbtPlugin("org.scalanlp" % "sbt-jflex" % "1.0")
 ```
 
 
@@ -24,7 +24,7 @@ re-generate the java source files.
 ## Include Plugin Settings
 
 ```scala
-   seq(sbtjflex.SbtJFlexPlugin.jflexSettings: _*)
+seq(sbtjflex.SbtJFlexPlugin.jflexSettings: _*)
 ```
 Include the settings from `sbtjflex.SbtJFlexPlugin.jflexSettings` in
 your project build file. See the [SBT wiki page on plugins][1] for

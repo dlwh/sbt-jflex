@@ -19,9 +19,11 @@ package sbtjflex
 import sbt._
 import Process._
 import Keys._
-import jflex.Options
+import jflex.option.Options
 import jflex.Main
 import scala.collection.JavaConversions._
+import jflex.core.OptionUtils
+import jflex.generator.LexGenerator
 
 object SbtJFlexPlugin extends AutoPlugin {
 
@@ -86,11 +88,11 @@ object SbtJFlexPlugin extends AutoPlugin {
     target.mkdirs()
 
     // configure jflex tool
-    log.info("JFlex: Using JFlex version %s to generate source files.".format(Main.version))
+    log.info(s"JFlex: Using JFlex version ${jflex.base.Build.VERSION} to generate source files.")
     Options.dot = tool.dot
     Options.verbose = tool.verbose
     Options.dump = tool.dump
-    Options.setDir(target.getPath)
+    OptionUtils.setDir(target.getPath)
 
     // process grammars
     val grammars = sources
@@ -99,7 +101,7 @@ object SbtJFlexPlugin extends AutoPlugin {
     // add each grammar file into the jflex tool's list of grammars to process
     grammars foreach { g =>
       log.info("JFlex: Grammar file '%s' detected.".format(g.getPath))
-      Main.generate(g)
+      new LexGenerator(g).generate()
     }
 
     (target ** ("*.java")).get.toSet
